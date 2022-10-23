@@ -26,10 +26,10 @@ def busqueda(query):
     return None
     
 # Se realiza un analisis del html del documento analizado
-'''
+
 for j in busquedas:
     url = urlopen(j,context=ctx).read()
     res = BeautifulSoup(url, "html.parser")
     print(res('a'))
-'''
+
     
