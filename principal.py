@@ -5,13 +5,9 @@ try:
     from urllib.request import urlopen
     import pandas as pd
     import numpy as np
+    import analisisSentimiento as asen
 except ImportError:
     print("One module is missing found")
-# Que se va a buscar
-
-# Los links resultantes de la busqueda se almacenan aqui
-
-# Se recorre la lista de resultados y se almacenan en la lista
 
 # Ignore SSL certificate errors
 ctx = ssl.create_default_context()
@@ -25,19 +21,43 @@ Metodo que realiza la busqueda en google
 '''
 def busqueda():
     query = input("Busqueda: ")
-    busquedas = []
+    busquedas = {}
+    df = pd.DataFrame(columns=['Link', 'Titulo', 'Texto'])
     for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
-        busquedas.append(j)
-    print(busquedas)
-    for j in busquedas:  
+        busquedas.update({j:""})
+    print(busquedas.keys())
+    df['Link']= busquedas.keys()
+    resultados = []
+    titulos = []
+    for j in busquedas.keys():  
         try:
             url = urlopen(j,context=ctx).read()
             soup = BeautifulSoup(url, "html.parser")
             res = soup.find_all('p')
-            print([i.text for i in res])
-        except:
-            print("No es posible abrir la pagina")
-        
+            tit = soup.find_all('h1')
+            tit1 = [i.text for i in tit]
+            titulos.append(str(tit1))
+            res1 = [i.text for i in res]
+            resultados.append(str(res1)[0:500])
+        except OSError:
+            print("No es posible abrir la pagina"+ OSError.reason)
+    df['Texto'] = np.array(resultados)
+    df['Titulo'] = np.array(titulos)
+    return df
 
-busqueda()
+def busqueda_por_sentimiento():
+    df = busqueda()
+    df['Sentimiento'] = df['Texto'].apply(asen.analisisSentimiento)
+    print(df)
+    media = df['Sentimiento'].mean()
+    if(media<3):
+        return("Es probable que el dato sea falso")
+    elif(media>3):
+        return("Es probable que el dato sea verdadero")
+    else:
+        return("Es probable que el dato sea dudoso")
+
+def main():
+    print(busqueda_por_sentimiento())
     
+main()
