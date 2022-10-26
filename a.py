@@ -31,7 +31,7 @@ def busqueda():
     query = input("Busqueda: ")
     busquedas = {}
     df = pd.DataFrame(columns=['Link', 'Titulo', 'Texto'])
-    for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
+    for j in search(query, tld="com", num = 10, stop = 1, pause = 3):
         busquedas.update({j:""})
     print(busquedas.keys())
     df['Link']= busquedas.keys()
@@ -46,27 +46,11 @@ def busqueda():
             tit1 = [i.text for i in tit]
             titulos.append(str(tit1))
             res1 = [i.text for i in res]
-            resultados.append(str(res1)[0:500])
+            print(str(res1))
+            resultados.append(str(res1))#[0:500]
         except OSError:
-            print("No es posible abrir la pagina"+ OSError.reason)
+            print("No es posible abrir la pagina"+ OSError)
     df['Texto'] = np.array(resultados)
     df['Titulo'] = np.array(titulos)
     return df
 print(busqueda())
-
-def busqueda_por_sentimiento():
-    df = busqueda()
-    df['Sentimiento'] = df['Texto'].apply(asen.analisisSentimiento)
-    print(df)
-    media = df['Sentimiento'].mean()
-    if(media<3):
-        return("Es probable que el dato sea falso")
-    elif(media>3):
-        return("Es probable que el dato sea verdadero")
-    else:
-        return("Es probable que el dato sea dudoso")
-
-def main():
-    print(busqueda_por_sentimiento())
-    
-main()
