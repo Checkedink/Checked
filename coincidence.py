@@ -39,5 +39,5 @@ def extract_tokenize_clean(text):
     text= re.sub("(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
     tokens = nltk.sent_tokenize(text)
     return tokens
-"""print(extract_tokenize_clean("fuck you Gonorrea //"))"""
+print(extract_tokenize_clean("fuck you Gonorrea 1975 //"))
 
