@@ -12,18 +12,20 @@ from nltk import tokenize
 
 nltk.download('stopwords')
 nltk.download('punkt')
-test= open("test.txt", mode="r", encoding="utf8")
+model= SentenceTransformer('all-mpnet-base-v2')
+"""test= open("test.txt", mode="r", encoding="utf8")
 text= test.read()
 print(text)
-test.close()
+test.close()"""
 def conincidence_by_dp(options:list, match:str)->tuple: #busca la coincidencia más cercana
     """Ratios = process.extract()""" # esto se deja por si queremos generar un promedio.
     highest = process.extractOne(options,match)
     return highest
 #este programa da la similaridad a partir de machien learning y transformar las palabras en vectores, que con el modelo 
 # se processa, devuelve una matriz de n * n donde n son la cantidad de palabras que se le da  y basicamente es la coincidencia de cada palabra con cada palabra 
-def coincidence_by_embeddings(palabras):
-    model= SentenceTransformer('all-mpnet-base-v2')
+#si lo crea una y otra vez pero creo que hay limitaciones y por ende pues pasa esto 
+def coincidence_by_embeddings(palabras,query):
+    palabras.append(query)
     embeddings= model.encode(palabras)
     sim= np.zeros((len(palabras), len(palabras)))
     for i in range(len(palabras )):

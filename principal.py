@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import analisisSentimiento as asen
 import ssl 
+import coincidence 
 """try:
     from googlesearch import search
     from bs4 import BeautifulSoup
@@ -65,8 +66,30 @@ def busqueda_por_sentimiento():
         return("Es probable que el dato sea verdadero")
     else:
         return("Es probable que el dato sea dudoso")
-
 def main():
+    print(busqueda_mod())
     print(busqueda_por_sentimiento())
     
 main()
+def busqueda_mod():
+    query = input("Busqueda: ")
+    busquedas = {}
+    for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
+        busquedas.update({j:""})
+    print(busquedas.keys())
+    for j in busquedas.keys():  
+        try:
+            url = urlopen(j,context=ctx).read()
+            soup = BeautifulSoup(url, "html.parser")
+            res = soup.find_all('p')
+            res1 = [i.text for i in res]
+            final=np.append(res1)
+            for tex in final:
+                tokens=coincidence.extract_tokenize_clean(tex)
+                res=coincidence.coincidence_by_embeddings(tokens,query)
+                for element in res[-1]:
+                    if element>0.8:
+                        return True
+        except OSError:
+            print("No es posible abrir la pagina"+ OSError.reason)
+    return False
