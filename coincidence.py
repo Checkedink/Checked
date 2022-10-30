@@ -2,6 +2,7 @@
 Primera parte reconocimiento de cadenas por porcentages 
 """
 import nltk.corpus
+import re
 from fuzzywuzzy import process #importa el fuzzy wuzzy
 import nltk
 import numpy as np
@@ -35,7 +36,8 @@ def extract_tokenize_clean(text):
     text = text.lower()
     stop = stopwords.words('english')
     text = " ".join([word for word in text.split() if word not in (stop)])
+    text= re.sub("(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
     tokens = nltk.sent_tokenize(text)
     return tokens
-
+"""print(extract_tokenize_clean("fuck you Gonorrea //"))"""
 

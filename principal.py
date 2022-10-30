@@ -53,7 +53,6 @@ def busqueda():
     df['Texto'] = np.array(resultados)
     df['Titulo'] = np.array(titulos)
     return df
-print(busqueda())
 
 def busqueda_por_sentimiento():
     df = busqueda()
@@ -66,11 +65,6 @@ def busqueda_por_sentimiento():
         return("Es probable que el dato sea verdadero")
     else:
         return("Es probable que el dato sea dudoso")
-def main():
-    print(busqueda_mod())
-    print(busqueda_por_sentimiento())
-    
-main()
 def busqueda_mod():
     query = input("Busqueda: ")
     busquedas = {}
@@ -90,6 +84,9 @@ def busqueda_mod():
                 for element in res[-1]:
                     if element>0.8:
                         return True
-        except OSError:
-            print("No es posible abrir la pagina"+ OSError.reason)
+        except Exception as e: print(e)
     return False
+def main():
+    print(busqueda_mod())
+    print(busqueda_por_sentimiento())
+main()
