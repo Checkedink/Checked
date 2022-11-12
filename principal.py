@@ -66,24 +66,28 @@ def busqueda_por_sentimiento():
     else:
         return("Es probable que el dato sea dudoso")
 def busqueda_mod():
-    query = input("Busqueda: ")
+    query = """maradona murio en 2020?""" # """input("Busqueda: ")"""
     busquedas = {}
     for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
         busquedas.update({j:""})
     print(busquedas.keys())
+    query=coincidence.extract_tokenize_clean(query)
+    final = []
     for j in busquedas.keys():  
         try:
             url = urlopen(j,context=ctx).read()
             soup = BeautifulSoup(url, "html.parser")
-            res = soup.find_all('p')
+            res = soup.find_all('p', text=False,recursive=True)
             res1 = [i.text for i in res]
-            final=np.append(res1)
-            for tex in final:
+            final.append(res1)
+            for tex in final[0]:
                 tokens=coincidence.extract_tokenize_clean(tex)
-                res=coincidence.coincidence_by_embeddings(tokens,query)
-                for element in res[-1]:
-                    if element>0.8:
-                        return True
+                if len(tokens) != 0:
+                    res = coincidence.coincidence_by_embeddings(tokens, query)
+                    for j in range(len(res)-1):
+                        element=res[-1][j]
+                        if element > 0.8:
+                            return True
         except Exception as e: print(e)
     return False
 def main():

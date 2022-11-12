@@ -49,5 +49,6 @@ def split_into_sentences(text):
     sentences = sentences[:-1]
     sentences = [s.strip() for s in sentences]
     return sentences
+
 print(split_into_sentences(hello))
 

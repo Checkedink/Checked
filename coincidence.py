@@ -26,7 +26,7 @@ def conincidence_by_dp(options:list, match:str)->tuple: #busca la coincidencia m
 # se processa, devuelve una matriz de n * n donde n son la cantidad de palabras que se le da  y basicamente es la coincidencia de cada palabra con cada palabra 
 #si lo crea una y otra vez pero creo que hay limitaciones y por ende pues pasa esto 
 def coincidence_by_embeddings(palabras,query):
-    palabras.append(query)
+    palabras.append(query[0])
     embeddings= model.encode(palabras)
     sim= np.zeros((len(palabras), len(palabras)))
     for i in range(len(palabras )):
@@ -39,5 +39,6 @@ def extract_tokenize_clean(text):
     text= re.sub("(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
     tokens = nltk.sent_tokenize(text)
     return tokens
+
 print(extract_tokenize_clean("fuck you Gonorrea 1975 //"))
 
