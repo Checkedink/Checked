@@ -30,6 +30,7 @@ Metodo que realiza la busqueda en google
 '''
 def busqueda():
     query = insertQuery()
+    print("Verificando... Por favor espere...\n")
     busquedas = {}
     df = pd.DataFrame(columns=['Link', 'Titulo', 'Texto'])
     for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
@@ -108,7 +109,12 @@ def printFuentes(fuentes):
 def main():
     #print(busqueda_mod())
     while True:
-        print(busqueda_mod())
+        resultado=busqueda_mod()
+        if resultado:
+            print("*** La información introducida es verdadera ***\n")
+        else:
+            print("*** La información introducida es falsa ***\n")
         # print(busqueda_por_sentimiento())
+        # ctrl+c en la consola para detener
 
 main()
