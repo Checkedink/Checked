@@ -29,12 +29,12 @@ Metodo que realiza la busqueda en google
 @return una lista con todos los htmls encontrados en la busqueda
 '''
 def busqueda():
-    query = input("Busqueda: ")
+    query = insertQuery()
     busquedas = {}
     df = pd.DataFrame(columns=['Link', 'Titulo', 'Texto'])
     for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
         busquedas.update({j:""})
-    print(busquedas.keys())
+    printFuentes(busquedas.keys())
     df['Link']= busquedas.keys()
     resultados = []
     titulos = []
@@ -49,7 +49,7 @@ def busqueda():
             res1 = [i.text for i in res]
             resultados.append(str(res1)[0:500])
         except OSError:
-            print("No es posible abrir la pagina"+ OSError.reason)
+            print("No es posible abrir la pagina")
     df['Texto'] = np.array(resultados)
     df['Titulo'] = np.array(titulos)
     return df
@@ -65,12 +65,13 @@ def busqueda_por_sentimiento():
         return("Es probable que el dato sea verdadero")
     else:
         return("Es probable que el dato sea dudoso")
+
 def busqueda_mod():
-    query = """maradona murio en 2020?""" # """input("Busqueda: ")"""
+    query = insertQuery()
     busquedas = {}
-    for j in search(query, tld="com", num = 10, stop = 10, pause = 3):
+    for j in search(query, tld="com", num = 5, stop = 5, pause = 3):
         busquedas.update({j:""})
-    print(busquedas.keys())
+    printFuentes(busquedas.keys())
     query=coincidence.extract_tokenize_clean(query)
     final = []
     for j in busquedas.keys():  
@@ -90,7 +91,24 @@ def busqueda_mod():
                             return True
         except Exception as e: print(e)
     return False
+
+def insertQuery():
+    print("\n"+"*"*44+"\n")
+    print( "Por favor inserte la información a consultar\n")
+    print("*"*44+"\n")
+    query= input("-> ")
+    print("\n")
+    return query
+
+def printFuentes(fuentes):
+    print("-"*44+"\n"+"Fuentes consultadas\n")
+    for fuente in fuentes:
+        print("-> "+ fuente +"\n" )
+
 def main():
-    print(busqueda_mod())
-    print(busqueda_por_sentimiento())
+    #print(busqueda_mod())
+    while True:
+        print(busqueda_mod())
+        # print(busqueda_por_sentimiento())
+
 main()

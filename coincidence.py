@@ -40,5 +40,5 @@ def extract_tokenize_clean(text):
     tokens = nltk.sent_tokenize(text)
     return tokens
 
-print(extract_tokenize_clean("fuck you Gonorrea 1975 //"))
+# print(extract_tokenize_clean("fuck you Gonorrea 1975 //"))
 
